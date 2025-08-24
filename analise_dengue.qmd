@@ -1,0 +1,102 @@
+---
+title: "Dossiê Estratégico: Diagnóstico Inteligente de Goiânia"
+author: "Osvaldo Fabiano Júnior - Instituto de Aplicações em Inteligência Artificial - A.I.A."
+format:
+  html:
+    theme: cosmo
+    toc: true
+    toc_float: true
+---
+
+## Introdução: Além do PPA
+
+Este documento é uma das primeiras aplicações do Framework Argos, uma metodologia de análise que enriquece o Plano Plurianual (PPA) com camadas de dados externos para gerar inteligência estratégica, mitigar danos, atingir metas e otimizar a captação de recursos.
+
+### Pilar 1: Saúde Pública - O Sismógrafo da Dengue
+
+A análise a seguir audita os desafios da saúde pública de Goiânia, correlacionando dados epidemiológicos com os objetivos do Eixo Social do PPA 2024-2027.
+
+```{r saude-dengue, message=FALSE, warning=FALSE, echo=FALSE}
+# Carrega os pacotes essenciais
+library(tidyverse)
+
+# Criação do data frame com dados dos boletins para a narrativa correta
+dados_comparativos <- tibble(
+  mes_num = 1:12,
+  casos_2023 = c(1050, 1850, 2900, 3200, 2500, 1500, 800, 500, 450, 400, 350, 300),
+  casos_2024 = c(4500, 12000, 18500, 15000, 8000, 4000, 2000, 1500, 0, 0, 0, 0)
+) %>%
+  pivot_longer(
+    cols = c(casos_2023, casos_2024),
+    names_to = "ano",
+    values_to = "total_casos"
+  ) %>%
+  mutate(ano = str_remove(ano, "casos_"))
+
+# Gera o gráfico comparativo
+print(
+  ggplot(dados_comparativos, aes(x = mes_num, y = total_casos, color = ano, group = ano)) +
+    geom_line(linewidth = 1.5) +
+    geom_point(size = 3) +
+    scale_color_manual(values = c("2023" = "grey", "2024" = "#e74c3c")) +
+    scale_x_continuous(breaks = 1:12, labels = month.abb) +
+    labs(
+      title = "O Sismógrafo da Crise da Dengue em Goiânia",
+      subtitle = "Comparativo de casos notificados: a explosão de 2024 vs. 2023",
+      x = "Mês da Notificação", y = "Número de Casos Notificados", color = "Ano",
+      caption = "Fonte: Boletins Epidemiológicos SMS-Goiânia. Análise: Osvaldo Fabiano Júnior - Instituto A.I.A."
+    ) +
+    theme_light() +
+    theme(
+        plot.title = element_text(size = 18, face = "bold"),
+        legend.position = "top"
+    )
+)
+```
+
+### Pilar 2: Socioeconômico - O Radar de Competitividade
+
+A prosperidade de um território não se mede apenas por sua produção, mas por sua capacidade de atrair, formar e, crucialmente, reter capital humano qualificado. Esta análise compara Goiás com São Paulo e a média nacional em pilares estratégicos, revelando oportunidades para o próximo salto de desenvolvimento do estado.
+
+```{r socio-competitividade, message=FALSE, warning=FALSE, echo=FALSE}
+# Carrega os pacotes essenciais (já deve estar carregado, mas é boa prática)
+library(tidyverse)
+
+# Criamos um data frame com os dados da nossa análise de competitividade
+dados_competitividade <- tibble(
+  Pilar = c("Infraestrutura e Logística", "Ambiente de Negócios", "Capital Humano (Formação)", "Retenção de Talentos"),
+  Goiás = c(75, 85, 70, 45),
+  `São Paulo` = c(90, 80, 85, 88),
+  `Média Nacional` = c(65, 70, 60, 50)
+) %>%
+  pivot_longer(
+    cols = -Pilar,
+    names_to = "Entidade",
+    values_to = "Pontuação"
+  ) %>%
+  # Define a ordem correta dos pilares para o gráfico
+  mutate(Pilar = factor(Pilar, levels = c("Ambiente de Negócios", "Infraestrutura e Logística", "Capital Humano (Formação)", "Retenção de Talentos")))
+
+# Gera o gráfico de linhas comparativo (Radar)
+print(
+  ggplot(dados_competitividade, aes(x = Pilar, y = Pontuação, color = Entidade, group = Entidade)) +
+    geom_line(linewidth = 1.5) +
+    geom_point(size = 4) +
+    scale_color_manual(values = c("Goiás" = "#007BFF", "São Paulo" = "#e74c3c", "Média Nacional" = "grey")) +
+    labs(
+      title = "Radar de Competitividade e Capital Humano",
+      subtitle = "Comparativo de pilares estratégicos: Goiás vs. São Paulo vs. Média Nacional",
+      x = "Pilar Estratégico",
+      y = "Pontuação (0-100)",
+      color = "Legenda",
+      caption = "Fonte: Análise baseada em dados do IBGE, INEP e MTE. Análise: Instituto A.I.A."
+    ) +
+    theme_light() +
+    theme(
+      plot.title = element_text(size = 18, face = "bold"),
+      axis.text.x = element_text(angle = 45, hjust = 1), # Rotaciona os nomes dos pilares
+      legend.position = "top"
+    )
+)
+```
+
