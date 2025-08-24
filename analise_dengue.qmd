@@ -2,8 +2,7 @@
 title: "Dossiê Estratégico: Diagnóstico Inteligente de Goiânia"
 author: "Osvaldo Fabiano Júnior - Instituto de Aplicações em Inteligência Artificial - A.I.A."
 format:
-  html:
-    theme: cosmo
+  pdf:
     toc: true
     toc_float: true
 ---
